@@ -1,5 +1,5 @@
 {
-  "name": "lunajoy",
+  "name": "@lunajoy/platform",
   "module": "index.ts",
   "type": "module",
   "private": true,

@@ -1,0 +1,87 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# LunaJoy Matching Engine Rule
+
+## 🧠 Context: What is LunaJoy?
+LunaJoy is a mental health platform focused on personalized care for women and underrepresented communities. The product includes a clinician matching engine that helps patients find the most relevant therapists or psychiatric providers. LunaJoy values inclusivity, speed of care, and matching based on real human needs — not just availability.
+
+The matching engine supports onboarding, re-matching, scheduling, retention, and outcome optimization across the platform.
+
+---
+
+## 🎯 Objective
+Design and implement a fullstack service that:
+- Accepts patient intake data
+- Returns a ranked list of best-fit clinicians
+- Uses scoring rules and multi-layer prioritization
+- Includes both backend logic and frontend UI
+
+---
+
+## 📥 Inputs
+Patient preferences include:
+- `state`, `language`, `gender_preference`, `insurance_provider`
+- `appointment_type` ("therapy" or "medication")
+- `clinical_needs` (only if appointment type is therapy)
+- `preferred_time_slots`, `urgency_level`
+
+❗ If `appointment_type` is `"medication"`, ignore `clinical_needs`.
+
+---
+
+## 📤 Outputs
+Each matched clinician should return:
+- `full_name`
+- `matching_score`
+- `explanation` (e.g., "Matches language, availability, accepts insurance")
+- `availability` (boolean)
+- `overlapping_attributes` (list)
+
+---
+
+## 🧠 Matching Logic
+
+### 🔍 Patient-Facing Filters
+- State license
+- Preferred language
+- Gender (optional)
+- Clinical needs (optional, only for therapy)
+- Availability windows (optional)
+
+### ⚙️ Backend Prioritization
+1. **Immediate availability** (within 24–72 hrs or real-time)
+2. **Insurance match**
+3. **Load balancing** (spread sessions evenly)
+4. *(Optional)* Clinical match depth (e.g., trauma-informed, LGBTQ+ affirming)
+
+---
+
+## 🏗️ Architecture
+- `POST /match`: returns ranked clinicians
+- `GET /clinicians`: returns mock data
+- Store data in JSON, SQLite, or in-memory
+- Backend: FastAPI or Node.js
+- Frontend: React or modern equivalent
+
+---
+
+## 🧪 Bonus Features
+- `GET /match/explain`: natural language rationale
+- UI to simulate intake & results
+- Dummy external scheduling integration
+- Basic tests for matching logic
+
+---
+
+## 📝 Dev Notes
+- Log match outcomes for auditing
+- Support overrides, prioritization weights, and fallbacks
+- Design for scalability and state coverage
+- Keep clean architecture under `src/`
+- Add logic/docs to `docs/architecture.md`, `docs/matching-logic.md`
+- Include setup instructions in `README.md`
+
+---

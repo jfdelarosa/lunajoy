@@ -4,6 +4,7 @@ import type { AppOpenAPI } from "@/lib/types";
 import { BASE_PATH } from "@/lib/constants";
 import createRouter from "@/lib/create-router";
 import clinician from "@/routes/clinician/clinician.index";
+import { swaggerUI } from '@hono/swagger-ui'
 
 export function registerRoutes(app: AppOpenAPI) {
     return app
@@ -17,6 +18,7 @@ export function registerRoutes(app: AppOpenAPI) {
                 openapi: "3.0.0",
             },
         )
+        .use("/swagger", swaggerUI({ url: '/docs' }))
         .use("*", logger())
         .use("*", cors())
         .route("/", clinician)
