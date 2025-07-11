@@ -1,9 +1,9 @@
-import { Hono } from 'hono'
+import createApp from "@/lib/create-app";
+import { registerRoutes } from "@/routes";
 
-const app = new Hono()
+const app = registerRoutes(createApp());
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
-
-export default app
+export default {
+	fetch: app.fetch,
+	port: process.env.PORT || 3000,
+};

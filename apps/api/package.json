@@ -4,9 +4,14 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
-    "hono": "^4.8.4"
+    "@hono/zod-openapi": "^0.19.9",
+    "@hono/zod-validator": "^0.7.0",
+    "hono": "^4.8.4",
+    "stoker": "^1.4.3",
+    "zod": "^4.0.5"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@types/bun": "latest"
   }
 }
