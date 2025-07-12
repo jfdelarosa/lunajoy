@@ -5,6 +5,7 @@
   },
   "scripts": {
     "dev": "bun run --hot src/index.ts",
+    "start": "bun run src/index.ts",
     "generate-clinicians": "bun run src/scripts/generate-clinicians.ts"
   },
   "dependencies": {
@@ -13,7 +14,7 @@
     "@hono/zod-validator": "^0.7.0",
     "@lunajoy/shared": "workspace:*",
     "hono": "^4.8.4",
-    "stoker": "^1.4.3",
+    "stoker": "^1.4.3"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
