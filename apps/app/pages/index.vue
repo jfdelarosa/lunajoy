@@ -1,74 +1,74 @@
 <script setup lang="ts">
-import { Heart, Users, Calendar, CheckCircle } from 'lucide-vue-next'
+import { useStepper } from '@/composables/useStepper'
+import StartStep from '@/components/wizzard/start.vue'
+import ProfileStep from '@/components/wizzard/profile.vue'
+import PreferencesStep from '@/components/wizzard/preferences.vue'
 
-definePageMeta({
-    layout: "onboarding",
-});
-
-
+// Define wizard steps
 const steps = [
     {
-        title: "Tell us about your preferences",
-        description: "We'll ask you a few questions to connect you with the right mental health professional",
+        id: 'start',
+        title: 'Getting Started',
+        description: 'Welcome to LunaJoy'
     },
     {
-        title: "Share your availability",
-        description: "We'll ask you a few questions to connect you with the right mental health professional",
+        id: 'profile',
+        title: 'Profile',
+        description: 'Basic information'
     },
     {
-        title: "Get matched with providers",
-        description: "We'll ask you a few questions to connect you with the right mental health professional",
-    },
+        id: 'preferences',
+        title: 'Preferences',
+        description: 'Your preferences'
+    }
 ]
+
+// Initialize stepper with step names
+const stepNames = steps.map(step => step.id)
+const stepper = useStepper(stepNames, 'start')
+
+// Handle wizard navigation
+const handlePrevious = () => {
+    stepper.goToPrevious()
+}
+
+const handleNext = () => {
+    stepper.goToNext()
+}
+
+const handleStepChange = (stepIndex: number) => {
+    stepper.goTo(stepNames[stepIndex])
+}
+
+// Get current step index for the wizard component
+const currentStepIndex = computed(() => stepper.index.value)
 </script>
 
 <template>
-    <div class="max-w-xl mx-auto p-6">
-        <!-- Welcome Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-primary mb-3">
-                Let's find your perfect match
-            </h1>
-            <p class="text-lg text-base-content/70">
-                We'll ask you a few questions to connect you with the right professional
-            </p>
-        </div>
+    <div class="min-h-screen bg-base-200 py-8">
+        <div class="container mx-auto px-4">
+            <UiWizard :steps="steps" :current-step="currentStepIndex" @previous="handlePrevious" @next="handleNext"
+                @step-change="handleStepChange">
+                <template #default="{ currentStep, step }">
+                    <!-- Start Step -->
+                    <StartStep v-if="step.id === 'start'" @previous="handlePrevious" @next="handleNext" />
 
-        <!-- Main Card -->
-        <div class="card bg-base-100 shadow-xl border border-base-300">
-            <div class="card-body p-8">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-primary/10 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <Heart class="w-8 h-8 text-primary" />
+                    <!-- Profile Step -->
+                    <ProfileStep v-else-if="step.id === 'profile'" @previous="handlePrevious" @next="handleNext" />
+
+                    <!-- Preferences Step -->
+                    <PreferencesStep v-else-if="step.id === 'preferences'" @previous="handlePrevious"
+                        @next="handleNext" />
+
+                    <!-- Fallback -->
+                    <div v-else class="text-center">
+                        <h2 class="text-2xl font-bold mb-4">Step not found</h2>
+                        <p class="text-base-content/70">
+                            The current step "{{ step.id }}" is not implemented yet.
+                        </p>
                     </div>
-                    <h2 class="text-xl font-semibold text-base-content mb-3">
-                        Ready to get started?
-                    </h2>
-                    <p class="text-base-content/70">
-                        This will take about 3-5 minutes
-                    </p>
-                </div>
-
-                <!-- What to expect -->
-                <div class="space-y-3 mb-8">
-                    <div class="flex items-center gap-3" v-for="(step, index) in steps" :key="step.title">
-                        <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                            <span class="text-primary font-semibold text-sm">{{ index + 1 }}</span>
-                        </div>
-                        <span class="text-base-content">{{ step.title }}</span>
-                    </div>
-                </div>
-
-                <!-- Call to Action -->
-                <div class="text-center">
-                    <button class="btn btn-primary btn-lg w-full mb-3">
-                        Begin Matching
-                    </button>
-                    <p class="text-xs text-base-content/60">
-                        All information is secure and confidential
-                    </p>
-                </div>
-            </div>
+                </template>
+            </UiWizard>
         </div>
     </div>
 </template>

@@ -8,4 +8,5 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   css: ["~/assets/app.css"],
+  ssr: false,
 })
