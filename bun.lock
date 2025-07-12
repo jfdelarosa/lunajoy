@@ -28,6 +28,7 @@
     "apps/app": {
       "name": "nuxt-app",
       "dependencies": {
+        "@lunajoy/api": "workspace:*",
         "@tailwindcss/vite": "^4.1.11",
         "daisyui": "^5.0.46",
         "lucide-vue-next": "^0.525.0",

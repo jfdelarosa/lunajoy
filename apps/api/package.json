@@ -1,5 +1,8 @@
 {
   "name": "@lunajoy/api",
+  "exports": {
+    "./routes": "./src/routes/index.ts"
+  },
   "scripts": {
     "dev": "bun run --hot src/index.ts"
   },

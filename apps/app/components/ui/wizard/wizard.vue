@@ -5,6 +5,7 @@ interface Step {
     id: string
     title: string
     description?: string
+    component: Component
 }
 
 interface Props {
@@ -18,6 +19,7 @@ const emit = defineEmits<{
     (e: 'previous'): void
     (e: 'next'): void
     (e: 'step-change', stepIndex: number): void
+    (e: 'finish'): void
 }>()
 
 const isFirstStep = computed(() => props.currentStep === 0)
@@ -38,7 +40,11 @@ const handleNext = () => {
 const handleStepClick = (stepIndex: number) => {
     if (stepIndex <= props.currentStep) {
         emit('step-change', stepIndex)
+
+        return
     }
+
+    emit('finish')
 }
 </script>
 

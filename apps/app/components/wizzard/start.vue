@@ -2,38 +2,34 @@
 import { Heart } from 'lucide-vue-next'
 
 const emit = defineEmits<{
-    (e: 'previous'): void
     (e: 'next'): void
 }>()
 
 const steps = [
     {
-        title: "Tell us about your preferences",
-        description: "We'll ask you a few questions to connect you with the right mental health professional",
+        title: "Tell us about yourself",
+        description: "Basic information to help us get started",
     },
     {
-        title: "Share your availability",
-        description: "We'll ask you a few questions to connect you with the right mental health professional",
+        title: "What kind of care do you need?",
+        description: "Therapy, medication management, or both",
     },
     {
-        title: "Get matched with providers",
-        description: "We'll ask you a few questions to connect you with the right mental health professional",
+        title: "Share your preferences",
+        description: "Provider preferences and insurance information",
+    },
+    {
+        title: "Choose your availability",
+        description: "When would you like to meet?",
+    },
+    {
+        title: "Get matched",
+        description: "We'll find the best providers for you",
     },
 ]
 </script>
 
-
 <template>
-    <!-- Welcome Header -->
-    <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-primary mb-3">
-            Let's find your perfect match
-        </h1>
-        <p class="text-lg text-base-content/70">
-            We'll ask you a few questions to connect you with the right professional
-        </p>
-    </div>
-
     <!-- Main Card -->
     <div class="card bg-white shadow-xl border border-base-300">
         <div class="card-body p-8">
@@ -42,20 +38,24 @@ const steps = [
                     <Heart class="w-8 h-8 text-primary" />
                 </div>
                 <h2 class="text-xl font-semibold text-base-content mb-3">
-                    Ready to get started?
+                    Let's find your perfect match
                 </h2>
                 <p class="text-base-content/70">
-                    This will take about 3-5 minutes
+                    Answer a few quick questions to connect with the right professional.This will take about 2-3 minutes
                 </p>
             </div>
 
             <!-- What to expect -->
-            <div class="space-y-3 mb-8">
-                <div class="flex items-center gap-3" v-for="(step, index) in steps" :key="step.title">
-                    <div class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+            <div class="space-y-4 mb-8">
+                <div class="flex items-start gap-3" v-for="(step, index) in steps" :key="step.title">
+                    <div
+                        class="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                         <span class="text-primary font-semibold text-sm">{{ index + 1 }}</span>
                     </div>
-                    <span class="text-base-content">{{ step.title }}</span>
+                    <div>
+                        <p class="text-base-content font-medium">{{ step.title }}</p>
+                        <p class="text-sm text-base-content/60">{{ step.description }}</p>
+                    </div>
                 </div>
             </div>
 

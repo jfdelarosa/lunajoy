@@ -3,5 +3,5 @@
 
 
 @plugin "daisyui" {
-    themes: retro --default;
+    themes: retro --default, retro --prefersdark;
   }

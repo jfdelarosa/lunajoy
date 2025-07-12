@@ -7,6 +7,14 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  nitro: {
+    preset: "bun",
+    routeRules: {
+      "/api/**": {
+        proxy: `${process.env.NUXT_PUBLIC_API_URL}/**`,
+      },
+    },
+  },
   css: ["~/assets/app.css"],
   ssr: false,
 })
