@@ -10,6 +10,10 @@
     "typescript": "^5"
   },
   "workspaces": [
-    "apps/*"
-  ]
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "zod": "^4.0.5"
+  }
 }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Heart, Shield, Users, Briefcase, Home, Smile, ArrowRight } from 'lucide-vue-next'
+import { getSpecialtyOptions } from '@lunajoy/shared'
 
 const emit = defineEmits<{
     (e: 'previous'): void
@@ -19,54 +20,56 @@ watch(formData, (newData) => {
     })
 }, { deep: true })
 
+const specialtyOptions = getSpecialtyOptions()
+
 const clinicalNeeds = [
     {
         name: 'Anxiety',
-        value: 'anxiety',
+        value: 'ANX',
         icon: Heart,
         description: 'Worry, panic attacks, social anxiety, or generalized anxiety'
     },
     {
         name: 'Depression',
-        value: 'depression',
+        value: 'DEP',
         icon: Heart,
         description: 'Feeling sad, hopeless, or losing interest in activities'
     },
     {
         name: 'Trauma/PTSD',
-        value: 'trauma',
+        value: 'TRA',
         icon: Shield,
         description: 'Processing difficult experiences or traumatic events'
     },
     {
         name: 'Relationship Issues',
-        value: 'relationship',
+        value: 'REL',
         icon: Users,
         description: 'Dating, marriage, family, or friendship difficulties'
     },
     {
         name: 'Work/Career Stress',
-        value: 'work_stress',
+        value: 'STR',
         icon: Briefcase,
         description: 'Job burnout, career changes, or workplace challenges'
     },
     {
         name: 'Family Issues',
-        value: 'family',
+        value: 'FAM',
         icon: Home,
         description: 'Family conflicts, parenting, or household stress'
     },
     {
-        name: 'Self-esteem',
-        value: 'self_esteem',
+        name: 'ADHD',
+        value: 'ADHD',
         icon: Smile,
-        description: 'Building confidence and self-worth'
+        description: 'Attention deficit and hyperactivity challenges'
     },
     {
-        name: 'Life Transitions',
-        value: 'life_transitions',
+        name: 'Eating Disorders',
+        value: 'EAT',
         icon: ArrowRight,
-        description: 'Major life changes, moving, or starting new chapters'
+        description: 'Eating patterns, body image, or food relationship issues'
     },
 ]
 

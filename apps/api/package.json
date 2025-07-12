@@ -4,18 +4,22 @@
     "./routes": "./src/routes/index.ts"
   },
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "generate-clinicians": "bun run src/scripts/generate-clinicians.ts"
   },
   "dependencies": {
     "@hono/swagger-ui": "^0.5.2",
     "@hono/zod-openapi": "^0.19.9",
     "@hono/zod-validator": "^0.7.0",
+    "@lunajoy/shared": "workspace:*",
     "hono": "^4.8.4",
     "stoker": "^1.4.3",
-    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
     "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "zod": "^4.0.5"
   }
 }

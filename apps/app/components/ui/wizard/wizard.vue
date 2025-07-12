@@ -54,30 +54,5 @@ const handleStepClick = (stepIndex: number) => {
         <div class="mb-6">
             <slot :current-step="currentStep" :step="steps[currentStep]" />
         </div>
-
-        <!-- Navigation Buttons -->
-        <div class="flex justify-between items-center mt-6">
-            <button class="btn btn-ghost btn-outline" :class="{ 'btn-disabled': isFirstStep }" :disabled="isFirstStep"
-                @click="handlePrevious">
-                <ArrowLeft class="size-4" />
-                Previous
-            </button>
-
-            <div class="flex space-x-2">
-                <button v-for="(step, index) in steps" :key="`dot-${step.id}`" class="btn btn-xs btn-circle" :class="{
-                    'btn-primary': index === currentStep,
-                    'btn-outline': index !== currentStep,
-                    'btn-disabled': index > currentStep
-                }" @click="handleStepClick(index)">
-                    {{ index + 1 }}
-                </button>
-            </div>
-
-            <button class="btn btn-primary" :class="{ 'btn-disabled': isLastStep }" :disabled="isLastStep"
-                @click="handleNext">
-                {{ isLastStep ? 'Finish' : 'Next' }}
-                <ArrowRight v-if="!isLastStep" class="size-4" />
-            </button>
-        </div>
     </div>
 </template>

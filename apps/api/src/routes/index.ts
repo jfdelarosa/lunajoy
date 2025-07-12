@@ -21,6 +21,13 @@ export function registerRoutes(app: AppOpenAPI) {
         .use("/swagger", swaggerUI({ url: '/docs' }))
         .use("*", logger())
         .use("*", cors())
+        .use("*", async (c, next) => {
+            // Add 1 - 3 seconds of latency to simulate a real-world API
+            const latency = Math.random() * 2000 + 1000
+            await new Promise(resolve => setTimeout(resolve, latency))
+
+            return next()
+        })
         .route("/", clinician)
 }
 

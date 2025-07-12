@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { UserCheck, CreditCard, Minus, MoreHorizontal, Mars, Venus, NonBinary } from 'lucide-vue-next'
+import { UserCheck, CreditCard, Minus, MoreHorizontal, Mars, Venus, User } from 'lucide-vue-next'
+import { getInsuranceOptions } from '@lunajoy/shared'
 import type { PatientIntakeState } from '~/types'
 
 const emit = defineEmits<{
@@ -24,27 +25,13 @@ watch(formData, (newData) => {
 
 const genderPreferences = [
     { name: 'No Preference', value: 'no_preference', icon: Minus },
-    { name: 'Female', value: 'female', icon: Venus },
-    { name: 'Male', value: 'male', icon: Mars },
-    { name: 'Non-binary', value: 'non-binary', icon: NonBinary },
+    { name: 'Female', value: 'F', icon: Venus },
+    { name: 'Male', value: 'M', icon: Mars },
+    { name: 'Non-binary', value: 'NB', icon: User },
     { name: 'Other', value: 'other', icon: MoreHorizontal },
 ]
 
-const insuranceProviders = [
-    { name: 'Aetna', value: 'Aetna' },
-    { name: 'Anthem', value: 'Anthem' },
-    { name: 'Blue Cross Blue Shield', value: 'Blue Cross Blue Shield' },
-    { name: 'Cigna', value: 'Cigna' },
-    { name: 'Humana', value: 'Humana' },
-    { name: 'Kaiser Permanente', value: 'Kaiser Permanente' },
-    { name: 'Medicaid', value: 'Medicaid' },
-    { name: 'Medicare', value: 'Medicare' },
-    { name: 'Molina Healthcare', value: 'Molina Healthcare' },
-    { name: 'Tricare', value: 'Tricare' },
-    { name: 'UnitedHealthcare', value: 'UnitedHealthcare' },
-    { name: 'Self-pay', value: 'Self-pay' },
-    { name: 'Other', value: 'Other' },
-]
+const insuranceProviders = getInsuranceOptions()
 
 const isFormValid = computed(() => {
     return formData.value.gender_preference !== '' && formData.value.insurance !== ''
@@ -103,8 +90,8 @@ const handleNext = () => {
                         </span>
                         <select v-model="formData.insurance" :class="{ 'select-error': formData.insurance === '' }">
                             <option disabled value="">Select your insurance provider</option>
-                            <option v-for="insurance in insuranceProviders" :key="insurance.value"
-                                :value="insurance.value">
+                            <option v-for="insurance in insuranceProviders" :key="insurance.code"
+                                :value="insurance.code">
                                 {{ insurance.name }}
                             </option>
                         </select>

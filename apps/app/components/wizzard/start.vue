@@ -12,7 +12,7 @@ const steps = [
     },
     {
         title: "What kind of care do you need?",
-        description: "Therapy, medication management, or both",
+        description: "Therapy or medication management",
     },
     {
         title: "Share your preferences",

@@ -6,60 +6,49 @@ import CareTypeStep from '@/components/wizzard/care-type.vue'
 import ClinicalNeedsStep from '@/components/wizzard/clinical-needs.vue'
 import PreferencesStep from '@/components/wizzard/preferences.vue'
 import AvailabilityStep from '@/components/wizzard/availability.vue'
-import type { AppointmentType, GenderPreference } from '@/types'
+import type { GenderPreference } from '@lunajoy/shared'
+import { APPOINTMENT_TYPES, WIZARD_STEPS, WIZARD_STEP_CONFIG } from '@lunajoy/shared'
 
-const apiClient = useApiClient()
-const { state } = useAppState()
+const { state, resetAll } = useAppState()
+const router = useRouter()
 
-// Define wizard steps
+// Define wizard steps using shared constants
 const steps = [
     {
-        id: 'start',
-        title: 'Getting Started',
-        description: 'Welcome to LunaJoy',
+        ...WIZARD_STEP_CONFIG[WIZARD_STEPS.START],
         component: StartStep
     },
     {
-        id: 'profile',
-        title: 'Profile',
-        description: 'Basic information',
+        ...WIZARD_STEP_CONFIG[WIZARD_STEPS.PROFILE],
         component: ProfileStep
     },
     {
-        id: 'care-type',
-        title: 'Care Type',
-        description: 'Type of care needed',
+        ...WIZARD_STEP_CONFIG[WIZARD_STEPS.CARE_TYPE],
         component: CareTypeStep
     },
     {
-        id: 'clinical-needs',
-        title: 'Clinical Needs',
-        description: 'Areas to work on',
+        ...WIZARD_STEP_CONFIG[WIZARD_STEPS.CLINICAL_NEEDS],
         component: ClinicalNeedsStep
     },
     {
-        id: 'preferences',
-        title: 'Preferences',
-        description: 'Provider preferences',
+        ...WIZARD_STEP_CONFIG[WIZARD_STEPS.PREFERENCES],
         component: PreferencesStep
     },
     {
-        id: 'availability',
-        title: 'Availability',
-        description: 'When to meet',
+        ...WIZARD_STEP_CONFIG[WIZARD_STEPS.AVAILABILITY],
         component: AvailabilityStep
     }
 ]
 
 // Initialize stepper with step names
 const stepNames = steps.map(step => step.id)
-const stepper = useStepper(stepNames, 'start')
+const stepper = useStepper(stepNames, WIZARD_STEPS.START)
 
 // Filter steps based on appointment type
 const filteredSteps = computed(() => {
-    if (state.value.appointment_type === 'psychiatry') {
-        // Skip clinical-needs step for psychiatry appointments
-        return steps.filter(step => step.id !== 'clinical-needs')
+    if (state.value.appointment_type === 'MEDICATION') {
+        // Skip clinical-needs step for medication appointments
+        return steps.filter(step => step.id !== WIZARD_STEPS.CLINICAL_NEEDS)
     }
     return steps
 })
@@ -71,22 +60,34 @@ function handlePrevious() {
 
 async function handleNext() {
     if (stepper.isLast.value) {
-        const response = await apiClient.api.match.$post({
-            json: {
-                appointment_type: state.value.appointment_type as (typeof AppointmentType)[number],
-                state: state.value.state,
-                language: state.value.language,
-                gender_preference: state.value.gender_preference as (typeof GenderPreference)[number],
-                clinical_needs: state.value.clinical_needs as string[],
-                insurance: state.value.insurance,
-                preferred_availability: state.value.preferred_availability as string[],
-            }
+        if (!state.value.appointment_type) {
+            console.error('Appointment type is required')
+            return
+        }
+
+        // Redirect to match page with query parameters
+        const queryParams = new URLSearchParams({
+            appointment_type: state.value.appointment_type,
+            state: state.value.state || '',
+            language: state.value.language || '',
+            gender_preference: state.value.gender_preference || '',
+            insurance: state.value.insurance || ''
         })
 
-        const clinicians = await response.json()
+        // Add array parameters
+        if (state.value.clinical_needs && state.value.clinical_needs.length > 0) {
+            state.value.clinical_needs.forEach(need => {
+                queryParams.append('clinical_needs', need)
+            })
+        }
 
-        console.log(clinicians)
+        if (state.value.preferred_availability && state.value.preferred_availability.length > 0) {
+            state.value.preferred_availability.forEach(availability => {
+                queryParams.append('preferred_availability', availability)
+            })
+        }
 
+        router.push(`/match?${queryParams.toString()}`)
         return
     }
 
@@ -99,6 +100,12 @@ function handleStepChange(stepIndex: number) {
 
 // Get current step index for the wizard component
 const currentStepIndex = computed(() => stepper.index.value)
+
+// Handle reset functionality
+const handleReset = () => {
+    resetAll()
+    stepper.goTo(WIZARD_STEPS.START)
+}
 </script>
 
 <template>

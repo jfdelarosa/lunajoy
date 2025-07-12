@@ -1,0 +1,16 @@
+{
+    "name": "@lunajoy/shared",
+    "version": "1.0.0",
+    "description": "Shared constants, types, and utilities for LunaJoy",
+    "module": "./src/index.ts",
+    "type": "module",
+    "peerDependency": {
+        "zod": "^4.0.5"
+    },
+    "devDependencies": {
+        "typescript": "^5.8.3"
+    },
+    "exports": {
+        ".": "./src/index.ts"
+    }
+}

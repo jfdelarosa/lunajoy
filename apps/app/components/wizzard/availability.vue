@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Clock, Sun, Sunset, Moon, Calendar } from 'lucide-vue-next'
+import { getTimeSlotOptions } from '@lunajoy/shared'
 
 const emit = defineEmits<{
     (e: 'previous'): void
@@ -22,35 +23,35 @@ watch(formData, (newData) => {
 const timeSlots = [
     {
         name: 'Morning',
-        value: 'morning',
+        value: 'MOR',
         icon: Sun,
         description: '8 AM - 12 PM',
         timeRange: 'Early start to your day'
     },
     {
         name: 'Afternoon',
-        value: 'afternoon',
+        value: 'AFT',
         icon: Sun,
         description: '12 PM - 5 PM',
         timeRange: 'Midday appointments'
     },
     {
         name: 'Evening',
-        value: 'evening',
+        value: 'EVE',
         icon: Sunset,
         description: '5 PM - 8 PM',
         timeRange: 'After work hours'
     },
     {
         name: 'Late Evening',
-        value: 'late evening',
+        value: 'LATE',
         icon: Moon,
         description: '8 PM - 10 PM',
         timeRange: 'Later in the evening'
     },
     {
         name: 'Weekend',
-        value: 'weekend',
+        value: 'WKND',
         icon: Calendar,
         description: 'Saturday & Sunday',
         timeRange: 'Weekend availability'
