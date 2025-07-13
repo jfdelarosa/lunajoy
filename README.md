@@ -10,6 +10,12 @@ This project demonstrates a fullstack implementation of a matching engine that s
 - Scoring algorithms
 - Modern UI/UX for the patient experience
 
+## 📋 Process Flow
+
+The following diagram illustrates the complete flow:
+
+![Process Flow Diagram](docs/process%20flow%20diagram.png)
+
 ## 🏗️ Architecture
 
 This is a fullstack monorepo with:
