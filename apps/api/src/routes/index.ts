@@ -22,8 +22,10 @@ export function registerRoutes(app: AppOpenAPI) {
         .use("*", logger())
         .use("*", cors())
         .use("*", async (c, next) => {
-            // Add 1 - 3 seconds of latency to simulate a real-world API
-            const latency = Math.random() * 2000 + 1000
+            // Add 5 - 7 seconds of latency to simulate a real-world API
+            const min = 5000
+            const max = 7000
+            const latency = Math.floor(Math.random() * (max - min + 1)) + min
             await new Promise(resolve => setTimeout(resolve, latency))
 
             return next()

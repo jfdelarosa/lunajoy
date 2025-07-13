@@ -2,7 +2,6 @@
 import MatchResults from '@/components/MatchResults.vue'
 import type { GenderPreference } from '@lunajoy/shared'
 import {
-    APPOINTMENT_TYPES,
     getState,
     getLanguage,
     getInsurance,
@@ -19,8 +18,8 @@ import {
     Shield,
     Clock,
     Zap,
-    Users,
-    Calendar
+    Calendar,
+    Flower2
 } from 'lucide-vue-next'
 
 const apiClient = useApiClient()
@@ -31,6 +30,8 @@ const router = useRouter()
 const results = ref<any>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
+const progress = ref(0)
+const progressInterval = ref<NodeJS.Timeout | null>(null)
 
 // Extract query parameters
 const queryParams = computed(() => ({
@@ -67,6 +68,40 @@ const formattedPreferences = computed(() => {
     }
 })
 
+// Progress simulation
+const startProgress = () => {
+    progress.value = 0
+    progressInterval.value = setInterval(() => {
+        let increment = 1
+
+        if (progress.value > 20) {
+            increment = 2
+        }
+
+        if (progress.value > 50) {
+            increment = 3
+        }
+
+        if (progress.value > 70) {
+            increment = 1
+        }
+
+        progress.value = Math.min(100, progress.value + Math.random() * increment)
+    }, 50)
+}
+
+const stopProgress = () => {
+    if (progressInterval.value) {
+        clearInterval(progressInterval.value)
+        progressInterval.value = null
+    }
+    progress.value = 100
+    // Small delay to show 100% before hiding
+    setTimeout(() => {
+        progress.value = 0
+    }, 500)
+}
+
 // Make API request
 const fetchMatches = async () => {
     if (!isValidParams.value) {
@@ -76,6 +111,7 @@ const fetchMatches = async () => {
 
     loading.value = true
     error.value = null
+    startProgress()
 
     try {
         const params = queryParams.value
@@ -104,6 +140,7 @@ const fetchMatches = async () => {
         error.value = 'Failed to fetch matches. Please try again.'
         console.error('API Error:', err)
     } finally {
+        stopProgress()
         loading.value = false
     }
 }
@@ -116,6 +153,13 @@ const handleReset = () => {
 // Fetch matches on mount
 onMounted(() => {
     fetchMatches()
+})
+
+// Clean up on unmount
+onUnmounted(() => {
+    if (progressInterval.value) {
+        clearInterval(progressInterval.value)
+    }
 })
 
 // Watch for query parameter changes
@@ -172,7 +216,6 @@ const sections = computed(() => {
             <div class="w-80 bg-base-100 shadow-lg border-r border-base-300 min-h-screen">
                 <div class="sticky top-0 p-6">
                     <div class="flex items-center gap-2 mb-6">
-                        <Users class="h-5 w-5 text-primary" />
                         <h2 class="text-lg font-semibold">Your Preferences</h2>
                     </div>
 
@@ -208,12 +251,23 @@ const sections = computed(() => {
             </div>
 
             <!-- Main Content -->
-            <div class="flex-1 py-8">
+            <div class="flex-1 py-8" :class="{ 'flex justify-center items-center': loading }">
                 <div class="container mx-auto px-4">
                     <!-- Loading state -->
-                    <div v-if="loading" class="flex justify-center items-center min-h-96">
-                        <div class="loading loading-spinner loading-lg"></div>
-                        <span class="ml-4 text-lg">Finding your perfect match...</span>
+                    <div v-if="loading"
+                        class="flex flex-col justify-center items-center min-h-96 max-w-md mx-auto space-y-8">
+                        <div
+                            class="relative z-10 w-32 h-32 bg-base-content/10 rounded-full flex items-center justify-center">
+                            <Flower2 class="w-16 h-16 text-accent" stroke-width="1" />
+                        </div>
+
+                        <!-- Loading text -->
+                        <h2 class="text-3xl font-bold text-base-content">Finding your perfect match</h2>
+
+                        <progress class="progress progress-accent w-full" :value="progress" max="100"></progress>
+
+                        <!-- Subtext -->
+                        <p class="text-sm text-base-content/70 text-center">This may take a few minutes</p>
                     </div>
 
                     <!-- Error state -->
